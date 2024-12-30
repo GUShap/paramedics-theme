@@ -1,0 +1,32 @@
+section.parallax-section-item:first-of-type {
+    height: 110vh;
+}
+
+section.parallax-section-item:not(:first-of-type) {
+    height: 100vh;
+}
+
+section.parallax-section-item .parallax-section-content,
+section.parallax-section-item .parallax-section-content>*,
+section.parallax-section-item .parallax-section-content>.elementor-element,
+section.parallax-section-item .parallax-section-content>[data-elementor-type="section"],
+section.parallax-section-item .parallax-section-content>[data-elementor-type="section"]>.elementor-element,
+section.parallax-section-item .elementor-element[data-element_type="container"]>.e-widget-swiper,
+section.parallax-section-item .elementor-swiper,
+section.parallax-section-item .swiper,
+section.parallax-section-item .swiper-slide {
+    height: 100% !important;
+}
+
+/* body:has(section.side-scroll.active) {
+    overflow: hidden;
+} */
+
+section.side-scroll.active .swiper {
+    /* overflow-x: auto; */
+}
+
+section.parallax-section-item:is(.active, .visited) .parallax-section-content {
+    position: fixed;
+    inset: 0;
+}
