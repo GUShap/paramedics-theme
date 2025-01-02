@@ -1,12 +1,15 @@
 if (typeof $ == 'undefined') {
     var $ = jQuery;
 }
+const ajaxUrl = customVars.ajax_url;
 
 $(document).ready(function () {
     setSectionScrolloing();
     setHeaderEffects();
     setHeaderRotatingIcon();
     // setSideScrollSection();
+    /******/
+    setJourneyForm();
 });
 
 const sectionManager = (() => {
@@ -157,5 +160,227 @@ function setStickyHeading($stickyHeading) {
 
         $stickyHeading.offset({ top: newOffsetTop });
 
+    });
+}
+
+/*journey registration form*/
+
+function setJourneyForm() {
+    const $forms = $('form.sign-up-form');
+    $forms.each(function () {
+        const $form = $(this);
+        setFormPopup($form);
+        setFormSteps($form);
+        setCustomSelect($form);
+        setCustomDate($form);
+        setConditionalFields($form);
+        setFormSubmission($form);
+    });
+}
+
+function setCustomSelect($form) {
+    const $selectWrapper = $form.find('.input-wrapper.type-select');
+    const $customSelectWrapper = $selectWrapper.find('.custom-select-wrapper');
+    const $customSelectList = $customSelectWrapper.find('.custom-select-list');
+    const $customListRadio = $customSelectList.find('input[type="radio"]');
+
+    $customSelectWrapper.find('>label').on('click', function () {
+        const $wrapper = $(this).closest('.input-wrapper');
+        const $list = $(this).next();
+        $list.toggleClass('active');
+        $(document).on('click', function (e) {
+            const targetNode = e.target;
+            // check if target node has same $wrapper parent or is $wrapper
+            if (!$wrapper.is(targetNode) && !$.contains($wrapper[0], targetNode)) {
+                $list.removeClass('active');
+            }
+        }
+        );
+    });
+
+    $customListRadio.on('change', function () {
+        const $wrapper = $(this).closest('.custom-select-wrapper');
+        const $select = $(this).closest('.input-wrapper').find('select');
+        const $list = $(this).closest('.custom-select-list');
+
+        const prefix = $wrapper.data('prefix');
+        const isDate = $wrapper.data('date');
+
+        let value = $(this).val();
+        let text = prefix ? `${prefix} ${value}` : value;
+
+        if (isDate) {
+            const dateArr = value.split('-');
+            text = dateArr.join('/');
+        }
+
+        $wrapper.find('>label').text(text);
+        $list.removeClass('active');
+        $select.val(value).trigger('change');
+    });
+}
+
+function setCustomDate($form) {
+    const $dateInput = $form.find('input[name="dob"]');
+
+    $dateInput.on('blur', function () {
+        const dob = $(this).val();
+        if (!dob) return;
+        const dobArr = dob.split('-');
+        const newDob = `${dobArr[2]}/${dobArr[1]}/${dobArr[0]}`;
+        $dateInput.val(newDob).css('text-align', 'end');
+    });
+}
+
+function setConditionalFields($form) {
+    const $conditionalFields = $form.find('.input-wrapper.condition');
+    const setResVisibility = (value, condition) => {
+        const $followingInputWrappers = $form.find(`.condition-res[data-condition="${condition}"]`);
+        const $selectedRes = value ? $followingInputWrappers.filter(function () {
+            const conditionValues = $(this).data('condition-value');
+            return conditionValues.includes(value);
+        }) : null;
+
+        $followingInputWrappers.removeClass('active');
+        $followingInputWrappers.find('input, select, textarea').prop('required', false);
+
+        if (!$selectedRes) return;
+
+        $selectedRes.addClass('active');
+        $selectedRes.find('input, select, textarea').prop('required', true);
+    }
+
+    $conditionalFields.each(function () {
+        const $input = $(this).find('>input, >select, >textarea');
+        const condition = $(this).data('condition');
+        $input.on('change', function () {
+            const value = $(this).val();
+            setResVisibility(value, condition);
+        });
+        setResVisibility($input.val(), condition);
+    });
+}
+
+function setFormSteps($form) {
+    const $steps = $form.find('.form-step');
+    const $nextBtn = $form.find('.next-step');
+    const $prevBtn = $form.find('.prev-step');
+    const $submitBtn = $form.find('.submit-wrapper');
+    const $inputs = $form.find('input:not(.list-input), select, textarea');
+    let currentStep = 0;
+
+    $nextBtn.find('button').on('click', function () {
+        const $currentStep = $steps.eq(currentStep);
+        const $nextStep = $steps.eq(currentStep + 1);
+        if (!isRequiredStepInputsFilled($currentStep)) return;
+        $currentStep.removeClass('active');
+        $nextStep.addClass('active');
+        currentStep++;
+        $(this).prop('disabled', !isRequiredStepInputsFilled($nextStep));
+        $prevBtn.find('button').prop('disabled', false);
+    });
+
+    $prevBtn.find('button').on('click', function () {
+        const $currentStep = $steps.eq(currentStep);
+        const $prevStep = $steps.eq(currentStep - 1);
+        $currentStep.removeClass('active');
+        $prevStep.addClass('active');
+        currentStep--;
+
+        $(this).prop('disabled', isFirstStep($prevStep));
+        $nextBtn.find('button').prop('disabled', !isRequiredStepInputsFilled($prevStep));
+    });
+
+    $inputs.on('change', function () {
+        const $step = $(this).closest('.form-step');
+        const isLastStepx = isLastStep($step);
+        const requiredInputsFilled = isRequiredStepInputsFilled($step);
+
+        isLastStepx
+            ? $submitBtn.find('button').prop('disabled', !requiredInputsFilled)
+            : $nextBtn.find('button').prop('disabled', !requiredInputsFilled);
+    });
+}
+
+function isRequiredStepInputsFilled($step) {
+    const $inputs = $step.find('input:not(.list-input), select, textarea');
+    return Array.from($inputs).every(input => {
+        const $input = $(input);
+        const isRequired = $input.prop('required');
+        const isCheckbox = $input.prop('type') === 'checkbox';
+        const isRadio = $input.prop('type') === 'radio';
+
+        let isFilled = false
+
+        if (!isRequired) return true;
+
+        if (isCheckbox) {
+            isFilled = $input.is(':checked')
+        }
+        else if (isRadio) {
+            const name = $input.attr('name');
+            const $checkedRadio = $(`input[name="${name}"]:checked`);
+            isFilled = $checkedRadio.length;
+        }
+        else {
+            isFilled = $input.val() && $input.val().length > 0;
+        }
+
+        if (!isFilled) {
+        }
+
+        return isFilled
+    });
+
+}
+
+function isFirstStep($step) {
+    return $step.hasClass('step-1');
+}
+
+function isLastStep($step) {
+    return $step.hasClass('last');
+}
+
+function setFormSubmission($form) {
+    $form.on('submit', function (e) {
+        e.preventDefault();
+        let data = $form.serialize();
+        data += '&action=journey_registration';
+        data += '&security=' + customVars.nonce;
+
+        $.ajax({
+            url: ajaxUrl,
+            type: 'POST',
+            data,
+            beforeSend: function () {
+                $form.addClass('submitting');
+            },
+            success: function (response) {
+                $form.find('.form-loader').remove();
+                response.success
+                    ? $form.append(`<div class="response-message success">${response.data.message}</div>`)
+                    : $form.append(`<div class="response-message error">${response.data.message}</div>`);
+            },
+            error: function (response) {
+                $form.find('.form-loader').remove();
+                $form.append(`<div class="response-message error">${response.data.message}</div>`);
+            }
+        });
+
+    });
+}
+
+function setFormPopup($form) {
+    const $container = $form.closest('.sign-up-container');
+    const $openBtn = $container.find('.open-popup-button');
+    const $closeBtn = $container.find('.close-button');
+
+    $openBtn.on('click', function () {
+        $container.find('.form-wrapper').addClass('active');
+    });
+
+    $closeBtn.on('click', function () {
+        $container.find('.form-wrapper').removeClass('active');
     });
 }

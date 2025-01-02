@@ -30,3 +30,272 @@ section.parallax-section-item:is(.active, .visited) .parallax-section-content {
     position: fixed;
     inset: 0;
 }
+
+.sign-up-container .form-wrapper:not(.active){
+    display: none;
+}
+
+.sign-up-container .form-wrapper {
+    position: fixed;
+    bottom: 50%;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    transform: translateY(35%);
+}
+
+.sign-up-container .form-wrapper button:disabled{
+    opacity: 0.5;
+}
+
+.sign-up-container .form-wrapper button:disabled:hover{
+    background-color: var( --e-global-color-primary );
+    color:#fff;
+}
+
+.sign-up-container .form-wrapper:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-gradient);
+}
+
+.sign-up-container .form-wrapper .inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 50px;
+    z-index: 1;
+}
+
+.sign-up-container .sign-up-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.sign-up-container .form-section {
+    display: flex;
+}
+
+.sign-up-container .form-section:has(.active) {
+    z-index: 1;
+}
+
+.sign-up-container .form-section:is(.user-details-wrapper, .training-details-wrapper, .journey-details-wrapper) {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.sign-up-container .form-section:is(.user-details-wrapper, .training-details-wrapper, .journey-details-wrapper)>div {
+    width: calc(50% - (15px / 2));
+}
+
+.sign-up-container .journey-details-wrapper {
+    /* flex-direction: column;
+    gap: 15px; */
+}
+
+.sign-up-container .input-wrapper.type-select select {
+    display: none;
+}
+
+.sign-up-container .custom-select-wrapper {
+    position: relative;
+}
+
+.sign-up-container .custom-select-wrapper>label {
+    background-color: #fff;
+    border: 1px solid #666;
+    border-radius: 3px;
+}
+
+.sign-up-container .custom-select-wrapper:has(input[type="radio"]:checked)>label {
+    background-color: #e0e0e0;
+}
+
+.sign-up-container .custom-select-wrapper label {
+    width: 100%;
+    cursor: pointer;
+    padding: 12px 1rem;
+}
+
+.sign-up-container .custom-select-wrapper ul {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    padding: 0;
+    list-style: none;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    transition: all 0.15s ease;
+}
+
+.sign-up-container .custom-select-wrapper ul:not(.active) {
+    height: 0;
+}
+
+.sign-up-container .custom-select-wrapper ul li {
+    display: flex;
+    transition: all 0.15s ease;
+}
+
+.sign-up-container .custom-select-wrapper ul li:hover,
+.sign-up-container .custom-select-wrapper ul li:has(input:checked) {
+    background-color: #e0e0e0;
+}
+
+.sign-up-container .custom-select-wrapper ul li input {
+    display: none;
+}
+
+/*  */
+.sign-up-container .type-radio .options-wrapper {
+    display: flex;
+    gap: 15px;
+}
+
+.sign-up-container .type-radio .options-wrapper>*,
+.sign-up-container .type-checkbox,
+.sign-up-container .form-actions-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sign-up-container .form-actions-wrapper {
+    justify-content: flex-end;
+}
+
+.sign-up-container .form-step.active {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sign-up-container .form-step:not(.active) {
+    display: none;
+}
+
+.sign-up-container:not(:has(.form-step.last.active)) .form-actions-wrapper .submit-wrapper,
+.sign-up-container:has(.form-step.last.active) .form-actions-wrapper .next-step {
+    display: none;
+}
+
+.sign-up-container .input-wrapper.condition-res:not(.active) {
+    display: none;
+}
+
+.sign-up-container form.submitting div:is(.form-description, .form-step, .form-actions-wrapper),
+.sign-up-container form:not(.submitting) .form-loader {
+    display: none;
+}
+
+.sign-up-container form .form-loader {
+    padding: 50px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.sign-up-container form.submitting .form-loader img {
+    width: 150px;
+    height: 150px;
+    animation: rotating-variable-speed 2.5s linear infinite;
+}
+
+@keyframes rotating-variable-speed {
+    0% {
+        transform: rotate(0deg);
+        animation-timing-function: ease-in;
+        /* Accelerating */
+    }
+
+    75% {
+        transform: rotate(270deg);
+        animation-timing-function: ease-out;
+        /* Decelerating */
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.sign-up-container form .response-message {
+    text-align: center;
+    font-family: 'heebo';
+    font-weight: 600;
+    font-size: 21px;
+    margin-top: 20px;
+    position: relative;
+}
+
+.sign-up-container form .response-message:before,
+.sign-up-container form .response-message:after {
+    content: '';
+    position: absolute;
+}
+
+.sign-up-container form .response-message.success:before,
+.sign-up-container form .response-message.success:after {
+    border-color: #3aff3a;
+}
+
+.sign-up-container form .response-message.error:before,
+.sign-up-container form .response-message.error:after {
+    border-color: #8d2424;
+}
+
+
+.sign-up-container form .response-message:before {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.sign-up-container form .response-message.success:after {
+    top: 2px;
+    right: 2px;
+    transform: rotate(45deg);
+    width: 10px;
+    height: 18px;
+    border-right: 2px solid;
+    border-bottom: 2px solid;
+}
+
+.sign-up-container form .response-message.error:after {
+    content: '\00D7';
+    font-size: 18px;
+    top: 50%;
+    right: 0;
+    transform: translate(-50%, -50%);
+    color: #8d2424;
+}
+
+.sign-up-container .close-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    color: var( --e-global-color-primary );
+    background-color: #fff;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    padding: 0;
+}
+.sign-up-container .close-button:hover{
+    color:#fff;
+    background-color: var( --e-global-color-primary );
+}

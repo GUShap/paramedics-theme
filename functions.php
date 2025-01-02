@@ -46,7 +46,8 @@ function my_acf_json_save_point($path)
 }
 
 add_filter('acf/settings/load_json', 'my_acf_json_load_point');
-function my_acf_json_load_point($paths) {
+function my_acf_json_load_point($paths)
+{
     // Add the custom path
     $paths[] = CHILD_THEME_DIR . '/acf-json';
     return $paths;
@@ -57,10 +58,109 @@ function my_acf_json_load_point($paths) {
 require CHILD_THEME_DIR . '/includes/theme-hooks.php';
 
 /***************************/
+function get_journey_dates($journey_id)
+{
+    $journey_dates = get_field('journey_dates', $journey_id) ?? [];
+    $dates = [];
+    foreach ($journey_dates as $date) {
+        $departure_date = $date['departure_date'] ?? '';
+        $return_date = $date['return_date'] ?? '';
+        $is_active_registration = !empty($date['is_active_registration']);
+        $is_full = !empty($date['is_full']);
+        if (empty($departure_date) || has_date_passed($departure_date) || !$is_active_registration) {
+            continue;
+        }
+        $dates[] = [
+            'departure_date' => $departure_date,
+            'return_date' => $return_date,
+            'is_full' => $is_full
+        ];
+    }
+    return $journey_dates;
+}
+/***************************/
 
+function add_journey_participant($journey_id, $journey_date, $participant)
+{
+    $journey_dates = get_field('dates', $journey_id);
+    $is_registered = false;
+    $selected_date_idx = array_search($journey_date, array_column($journey_dates, 'departure_date'));
+    $selected_date = $journey_dates[$selected_date_idx];
+    $participants = gettype($selected_date['participants']) == 'string' ? json_decode($selected_date['participants']) : [];
+    $res = [
+        'status' => 'error',
+        'message' => 'כתובת האימייל כבר רשומה למסע'
+    ];
+
+    foreach ($participants as $registered_participant) {
+        if ($registered_participant->email == $participant['email']) {
+            $is_registered = true;
+            break;
+        }
+    }
+    if (!$is_registered) {
+        $participants[] = $participant;
+        $journey_dates[$selected_date_idx]['participants'] = json_encode($participants, JSON_UNESCAPED_UNICODE);
+        $res = [
+            'status' => 'success',
+            'message' => 'הרשמה בוצעה בהצלחה, ניצור עמך קשר בהקדם'
+        ];
+    }
+
+    update_field('dates', $journey_dates, $journey_id);
+    return $res;
+}
+/***************************/
 function dd($data)
 {
     echo '<pre>';
     print_r($data);
     echo '</pre>';
+}
+
+function format_date_to_hebrew($date)
+{
+    // Array of Hebrew month names
+    $hebrew_months = [
+        1 => 'ינואר',
+        2 => 'פברואר',
+        3 => 'מרץ',
+        4 => 'אפריל',
+        5 => 'מאי',
+        6 => 'יוני',
+        7 => 'יולי',
+        8 => 'אוגוסט',
+        9 => 'ספטמבר',
+        10 => 'אוקטובר',
+        11 => 'נובמבר',
+        12 => 'דצמבר'
+    ];
+
+    // Convert input date to DateTime object
+    $date_object = DateTime::createFromFormat('d-m-Y', $date);
+
+    // Extract parts of the date
+    $day = $date_object->format('j');
+    $month = (int) $date_object->format('n'); // Get month as an integer
+    $year = $date_object->format('Y');
+
+    // Format the date with Hebrew month
+    return $hebrew_months[$month] . ' ' . $day . ', ' . $year;
+}
+
+function has_date_passed($date)
+{
+    // Convert input date to DateTime object
+    $input_date = DateTime::createFromFormat('d-m-Y', $date);
+
+    // Check if the date is valid
+    if (!$input_date) {
+        return false; // Invalid date
+    }
+
+    // Get the current date
+    $current_date = new DateTime();
+
+    // Compare the dates
+    return $input_date < $current_date;
 }

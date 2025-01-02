@@ -54,28 +54,58 @@ function gs_enqueue_scripts()
 {
     wp_enqueue_style('gs-style', CHILD_THEME_URI . '/assets/css/front.css', array(), false, 'all');
     wp_enqueue_style('gs-elementor-style', CHILD_THEME_URI . '/assets/css/elementor.css', array(), false, 'all');
+
     wp_enqueue_script('gs-script', CHILD_THEME_URI . '/assets/js/front.js', array('jquery'), false, true);
+    wp_localize_script('gs-script', 'customVars', array('ajax_url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('gs-nonce')));
 }
 
 add_action('wp_enqueue_scripts', 'gs_enqueue_scripts');
 
-// 
 
-add_action('template_redirect', function () {
-    // $participants = [
-    //     [
-    //         'name' => 'John Doe',
-    //         'age' => 25,
-    //         'city' => 'New York',
-    //     ],
-    //     [
-    //         'name' => 'Jane Doe',
-    //         'age' => 30,
-    //         'city' => 'Los Angeles',
-    //     ],
-    // ];
-    // $departure_dates = get_field('dates', 648);
-    // $departure_dates[0]['participants_list'] = json_encode($participants);
-    // update_field('dates', $departure_dates, 648);
-    // dd($departure_dates);
-});
+// enqueue admin scripts & styles
+function gs_admin_enqueue_scripts()
+{
+    wp_enqueue_style('gs-admin-style', CHILD_THEME_URI . '/assets/css/admin.css', array(), false, 'all');
+    wp_enqueue_script('gs-admin-script', CHILD_THEME_URI . '/assets/js/admin.js', array('jquery'), false, true);
+}
+
+add_action('admin_enqueue_scripts', 'gs_admin_enqueue_scripts');
+/*********/
+
+/* AJAX Hooks */
+// recieve ajax request for action journey_registration
+function journey_registration_handler()
+{
+    $fields = $_POST;
+    $nonce = $fields['security'];
+
+    if (!wp_verify_nonce($nonce, 'gs-nonce')) {
+        wp_send_json_error('Invalid nonce');
+    }
+
+    $widget_id = $fields['widget_id'];
+    $journey_id = $fields['journey_id'];
+    $journey_date = $fields['journey_date'];
+    $participant = [
+        'name' => $fields['full_name'],
+        'email' => $fields['email'],
+        'phone' => $fields['phone'],
+        'dob' => $fields['dob'],
+        'gender' => $fields["{$widget_id}_gender"],
+        'training_type' => $fields['training_type'],
+        'training_number' => $fields['training_number'],
+        'training_institution' => $fields['training_institution'],
+        'unit' => $fields['unit'],
+        'journey_date' => $fields['journey_date'],
+        'is_flexible' => !empty($fields['flexability']),
+        'status' => 'pending',
+    ];
+
+    $res = add_journey_participant($journey_id, $journey_date, $participant);
+    if ($res['status'] == 'error') {
+        wp_send_json_error($res);
+    }
+    wp_send_json_success($res);
+}
+add_action('wp_ajax_journey_registration', 'journey_registration_handler');
+add_action('wp_ajax_nopriv_journey_registration', 'journey_registration_handler');

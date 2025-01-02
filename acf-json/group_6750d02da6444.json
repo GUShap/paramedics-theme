@@ -42,6 +42,29 @@
             "append": ""
         },
         {
+            "key": "field_6773f601b70ce",
+            "label": "השתתפות עצמית",
+            "name": "payment",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": "",
+            "max": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_6768851787e42",
             "label": "מבנה סדנה \/ מסע",
             "name": "curriculum",
@@ -203,7 +226,7 @@
                         "id": ""
                     },
                     "display_format": "d\/m\/Y",
-                    "return_format": "d\/m\/Y",
+                    "return_format": "d-m-Y",
                     "first_day": 0,
                     "allow_in_bindings": 0,
                     "parent_repeater": "field_67686ef82bbf8"
@@ -223,7 +246,7 @@
                         "id": ""
                     },
                     "display_format": "d\/m\/Y",
-                    "return_format": "d\/m\/Y",
+                    "return_format": "d-m-Y",
                     "first_day": 0,
                     "allow_in_bindings": 0,
                     "parent_repeater": "field_67686ef82bbf8"
@@ -301,7 +324,7 @@
                 {
                     "key": "field_6768769393ccf",
                     "label": "רשימת משתתפים",
-                    "name": "participants_list",
+                    "name": "participants",
                     "aria-label": "",
                     "type": "acfe_hidden",
                     "instructions": "",
@@ -315,6 +338,148 @@
                     "default_value": "",
                     "allow_in_bindings": 0,
                     "parent_repeater": "field_67686ef82bbf8"
+                }
+            ]
+        },
+        {
+            "key": "field_6773caec37b4c",
+            "label": "ארכיון",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_6773cb8a37b4d",
+            "label": "תאריכי עבר",
+            "name": "past_dates",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "acfe_repeater_stylised_button": 0,
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "הוספת תאריך למסע",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_6773cb8a37b4e",
+                    "label": "תאריך התחלה",
+                    "name": "",
+                    "aria-label": "",
+                    "type": "message",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "new_lines": "wpautop",
+                    "esc_html": 0,
+                    "parent_repeater": "field_6773cb8a37b4d"
+                },
+                {
+                    "key": "field_6773cb8a37b4f",
+                    "label": "תאריך סיום",
+                    "name": "",
+                    "aria-label": "",
+                    "type": "message",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "new_lines": "wpautop",
+                    "esc_html": 0,
+                    "parent_repeater": "field_6773cb8a37b4d"
+                },
+                {
+                    "key": "field_6773cb8a37b51",
+                    "label": "מספר משתתפים",
+                    "name": "",
+                    "aria-label": "",
+                    "type": "message",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "new_lines": "wpautop",
+                    "esc_html": 0,
+                    "parent_repeater": "field_6773cb8a37b4d"
+                },
+                {
+                    "key": "field_6773cb8a37b52",
+                    "label": "",
+                    "name": "participants_list_link",
+                    "aria-label": "",
+                    "type": "acfe_button",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "button_value": "לרשימת המשתתפים",
+                    "button_type": "button",
+                    "button_class": "participants-list-button button button-secondary",
+                    "button_id": "",
+                    "button_before": "",
+                    "button_after": "",
+                    "button_ajax": 0,
+                    "allow_in_bindings": 1,
+                    "parent_repeater": "field_6773cb8a37b4d"
+                },
+                {
+                    "key": "field_6773cb8a37b53",
+                    "label": "רשימת משתתפים",
+                    "name": "participants_list",
+                    "aria-label": "",
+                    "type": "acfe_hidden",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "participants-list",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "allow_in_bindings": 0,
+                    "parent_repeater": "field_6773cb8a37b4d"
                 }
             ]
         }
@@ -338,8 +503,11 @@
     "description": "",
     "show_in_rest": 0,
     "acfe_display_title": "",
-    "acfe_autosync": "",
+    "acfe_autosync": [
+        "json"
+    ],
     "acfe_form": 0,
     "acfe_meta": "",
-    "acfe_note": ""
+    "acfe_note": "",
+    "modified": 1735823413
 }

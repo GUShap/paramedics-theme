@@ -54,7 +54,7 @@ class Journey_Sign_Up_Form extends Widget_Base
             'description',
             [
                 'label' => __('Description', 'paramedics-theme'),
-                'type' => Controls_Manager::TEXTAREA,
+                'type' => Controls_Manager::WYSIWYG,
                 'input_type' => 'text',
                 'placeholder' => __('Enter your description', 'paramedics-theme'),
                 'default' => __('', 'paramedics-theme'),
@@ -83,13 +83,54 @@ class Journey_Sign_Up_Form extends Widget_Base
             ]
         );
 
+        // loader icon (png or svg)
+        $this->add_control(
+            'loader_icon',
+            [
+                'label' => __('Loader Icon', 'paramedics-theme'),
+                'type' => Controls_Manager::MEDIA,
+                'default' => [
+                    'url' => '',
+                ],
+            ]
+        );
+
         $this->end_controls_section();
 
         $this->start_controls_section(
             'style_section',
             [
-                'label' => __('Style', 'paramedics-theme'),
+                'label' => __('Form Style', 'paramedics-theme'),
                 'tab' => Controls_Manager::TAB_STYLE,
+            ]
+        );
+        // form width
+        $this->add_control(
+            'form_width',
+            [
+                'label' => __('Form Width', 'paramedics-theme'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px', 'em', '%'],
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 1200,
+                        'step' => 1,
+                    ],
+                    'em' => [
+                        'min' => 0,
+                        'max' => 100,
+                        'step' => 1,
+                    ],
+                    '%' => [
+                        'min' => 0,
+                        'max' => 100,
+                        'step' => 1,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .sign-up-container .form-wrapper .inner' => 'width: {{SIZE}}{{UNIT}};',
+                ],
             ]
         );
 
@@ -100,7 +141,7 @@ class Journey_Sign_Up_Form extends Widget_Base
                 'type' => Controls_Manager::COLOR,
                 'default' => '#f7f7f7',
                 'selectors' => [
-                    '{{WRAPPER}} .sign-up-container .form-wrapper' => 'background-color: {{VALUE}}',
+                    '{{WRAPPER}} .sign-up-container .form-wrapper .inner' => 'background-color: {{VALUE}}',
                 ],
             ]
         );
@@ -112,8 +153,130 @@ class Journey_Sign_Up_Form extends Widget_Base
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
-                    '{{WRAPPER}} .sign-up-container .form-wrapper' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .sign-up-container .form-wrapper .inner' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
+            ]
+        );
+
+        // border
+        $this->add_group_control(
+            \Elementor\Group_Control_Border::get_type(),
+            [
+                'name' => 'form_border',
+                'label' => __('Form Border', 'paramedics-theme'),
+                'selector' => '{{WRAPPER}} .sign-up-container .form-wrapper .inner',
+            ]
+        );
+        // border radius
+        $this->add_control(
+            'form_border_radius',
+            [
+                'label' => __('Form Border Radius', 'paramedics-theme'),
+                'type' => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', 'em', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .sign-up-container .form-wrapper .inner' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        // title color, typography , alignment
+
+        $this->add_control(
+            'title_alignment',
+            [
+                'label' => __('Alignment', 'paramedics-theme'),
+                'type' => Controls_Manager::CHOOSE,
+                'options' => [
+                    'right' => [
+                        'title' => __('Right', 'paramedics-theme'),
+                        'icon' => 'eicon-text-align-right',
+                    ],
+                    'center' => [
+                        'title' => __('Center', 'paramedics-theme'),
+                        'icon' => 'eicon-text-align-center',
+                    ],
+                    'left' => [
+                        'title' => __('Left', 'paramedics-theme'),
+                        'icon' => 'eicon-text-align-left',
+                    ],
+                ],
+                'default' => 'center',
+                'toggle' => true,
+                'selectors' => [
+                    '{{WRAPPER}} .sign-up-container .form-wrapper .form-title' => 'text-align:{{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'title_color',
+            [
+                'label' => __('Title Color', 'paramedics-theme'),
+                'type' => Controls_Manager::COLOR,
+                'default' => '#000000',
+                'selectors' => [
+                    '{{WRAPPER}} .sign-up-container .form-wrapper .form-title' => 'color: {{VALUE}}',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Typography::get_type(),
+            [
+                'name' => 'title_typography',
+                'label' => __('Title Typography', 'paramedics-theme'),
+                'selector' => '{{WRAPPER}} .sign-up-container .form-wrapper .form-title',
+            ]
+        );
+
+        $this->add_control(
+            'description_alignment',
+            [
+                'label' => __('Alignment', 'paramedics-theme'),
+                'type' => Controls_Manager::CHOOSE,
+                'options' => [
+                    'right' => [
+                        'title' => __('Right', 'paramedics-theme'),
+                        'icon' => 'eicon-text-align-right',
+                    ],
+                    'center' => [
+                        'title' => __('Center', 'paramedics-theme'),
+                        'icon' => 'eicon-text-align-center',
+                    ],
+                    'left' => [
+                        'title' => __('Left', 'paramedics-theme'),
+                        'icon' => 'eicon-text-align-left',
+                    ],
+                ],
+                'default' => 'center',
+                'toggle' => true,
+                'selectors' => [
+                    '{{WRAPPER}} .sign-up-container .form-wrapper .form-description' => 'text-align:{{VALUE}};',
+                ],
+            ]
+        );
+
+
+        // description color & typography
+        $this->add_control(
+            'description_color',
+            [
+                'label' => __('Description Color', 'paramedics-theme'),
+                'type' => Controls_Manager::COLOR,
+                'default' => '#000000',
+                'selectors' => [
+                    '{{WRAPPER}} .sign-up-container .form-wrapper .form-description' => 'color: {{VALUE}}',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Typography::get_type(),
+            [
+                'name' => 'description_typography',
+                'label' => __('Description Typography', 'paramedics-theme'),
+                'selector' => '{{WRAPPER}} .sign-up-container .form-wrapper .form-description',
             ]
         );
 
@@ -229,6 +392,7 @@ class Journey_Sign_Up_Form extends Widget_Base
     protected function render()
     {
         $settings = $this->get_settings_for_display();
+        $widget_id = $this->get_id();
         $journey_data = $this->get_journey_data();
         $form_title = $this->process_text_variables($settings['title'], $journey_data['id']);
         $form_description = $this->process_text_variables($settings['description'], $journey_data['id']);
@@ -244,12 +408,14 @@ class Journey_Sign_Up_Form extends Widget_Base
         $id = get_the_ID();
         $title = get_the_title($id);
         $location = get_field('location', $id);
+        $payment = get_field('payment', $id);
         $dates = get_field('dates', $id);
         return [
             'id' => $id,
             'title' => $title,
             'location' => $location,
             'dates' => $dates,
+            'payment' => $payment,
         ];
     }
 
