@@ -1,0 +1,181 @@
+#journey-management ul.dates-list>li,
+#journey-management ul.dates-list>li.date-item>* {
+    display: flex;
+    flex: 1;
+    text-align: center;
+    justify-content: space-between;
+}
+
+#journey-management ul.dates-list>li {
+    margin-bottom: 10px;
+}
+
+#journey-management ul.dates-list>li>.details,
+#journey-management ul.dates-list>li>.details p{
+    font-size: 15px;
+    font-weight: 600;
+}
+
+#journey-management ul.dates-list>li.dates-heading {
+    font-weight: bold;
+    background-color: rgb(240, 240, 240);
+    padding: 10px 5px;
+    font-weight: bold;
+}
+
+#journey-management ul.dates-list>li.date-item {
+    flex-direction: column;
+    border: 1px solid #0000001f;
+}
+
+#journey-management ul.dates-list>li.date-item button.participants-list-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+#journey-management ul.dates-list>li.date-item button.participants-list-button:after {
+    content: '\1438';
+}
+
+#journey-management ul.dates-list>li.date-item:has(.participants-list-wrapper.active) button.participants-list-button:after {
+    content: '\142F';
+}
+
+
+#journey-management ul.dates-list>li.date-item>.details {
+    align-items: center;
+    padding: 0 5px;
+}
+
+#journey-management ul.dates-list>li .participants {
+    min-width: 120px;
+}
+
+#journey-management ul.dates-list>li.date-item .participants-list-wrapper:not(.active){
+    display: none;
+}
+
+/* .participants-list-popup {
+    position: fixed;
+    width: calc(100% - 160px);
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #0000006b;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+
+/* .participants-list-popup .popup-content {
+    width: 95%;
+}
+
+.participants-list-popup .participants-list-heading {
+    background-color: #fff;
+    padding: 15px 35px;
+}
+
+.participants-list-popup .participants-list-heading h3 {
+    margin: 0;
+} */
+
+ul.participants-list {
+    width: 100%;
+    margin: 0;
+}
+
+ul.participants-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin: 0;
+}
+
+ul.participants-list li.participant:nth-child(even) {
+    background-color: #fff;
+}
+
+ul.participants-list li.participant:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+ul.participants-list li>*:not(.index) {
+    flex: 1;
+    text-align: center;
+}
+
+ul.participants-list li.participant-heading {
+    font-weight: bold;
+    background-color: antiquewhite;
+    padding: 5px 0;
+}
+
+ul.participants-list li .index {
+    width: 35px;
+    line-height: 5;
+    background-color: blanchedalmond;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 0;
+    margin-left: 5px;
+}
+
+ul.participants-list li.participant select {
+    max-width: 160px;
+}
+
+ul.participants-list li.participant .details p {
+    margin: 0;
+}
+
+ul.participants-list li .participant-flexability span {
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: auto;
+}
+
+ul.participants-list li .participant-flexability span:before,
+ul.participants-list li .participant-flexability[data-flexible="false"] span:after {
+    content: '';
+    position: absolute;
+    left: 0;
+}
+
+ul.participants-list li .participant-flexability[data-flexible="false"] span:before,
+ul.participants-list li .participant-flexability[data-flexible="false"] span:after {
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background-color: rgb(156, 25, 25);
+}
+
+ul.participants-list li .participant-flexability[data-flexible="false"] span:before {
+    transform: rotate(45deg);
+}
+
+ul.participants-list li .participant-flexability[data-flexible="false"] span:after {
+    transform: rotate(-45deg);
+}
+
+ul.participants-list li .participant-flexability[data-flexible="true"] span:before {
+    height: 100%;
+    width: 55%;
+    border-right: 2px solid rgb(0, 128, 0);
+    border-bottom: 2px solid rgb(0, 128, 0);
+    transform: rotate(45deg);
+}
+
+ul.participants-list li .participant-status[data-status="pending"] {
+    background-color: rgb(255, 165, 0);
+}

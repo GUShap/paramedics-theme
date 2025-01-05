@@ -110,6 +110,32 @@ function add_journey_participant($journey_id, $journey_date, $participant)
     update_field('dates', $journey_dates, $journey_id);
     return $res;
 }
+
+function save_participant_data($post_id, $departure_date, $user_index, $participant_data)
+{
+    $journey_dates = get_field('dates', $post_id);
+    $selected_date_idx = array_search($departure_date, array_column($journey_dates, 'departure_date'));
+    $selected_date = $journey_dates[$selected_date_idx];
+    $participants = gettype($selected_date['participants']) == 'string' ? json_decode($selected_date['participants']) : [];
+
+    $participants[$user_index]->is_flexible = $participant_data['is_flexible'] == 'true';
+    $participants[$user_index]->status = $participant_data['status'];
+    $participants[$user_index]->contact = $participant_data['contact'];
+    $journey_dates[$selected_date_idx]['participants'] = json_encode($participants, JSON_UNESCAPED_UNICODE);
+    update_field('dates', $journey_dates, $post_id);
+    return [
+        'status' => 'success',
+        'message' => 'הנתונים נשמרו בהצלחה'
+    ];
+}
+
+function get_departure_participants($participants, $journey_statuses, $journey_contacts)
+{
+    $participants_list_template_path = CHILD_THEME_DIR . '/includes/admin/templates/participants-list.php';
+    if (file_exists($participants_list_template_path)) {
+        require_once $participants_list_template_path;
+    }
+}
 /***************************/
 function dd($data)
 {

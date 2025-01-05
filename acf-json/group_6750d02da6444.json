@@ -87,6 +87,24 @@
             "library": "all"
         },
         {
+            "key": "field_677849b6bbbc2",
+            "label": "מדיה",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
             "key": "field_67694dd8b04c3",
             "label": "באנר עליון",
             "name": "top_banner_image",
@@ -171,6 +189,160 @@
             "preview_size": "medium"
         },
         {
+            "key": "field_67785a91d4ca4",
+            "label": "ניהול",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_677849e3bbbc3",
+            "label": "אנשי קשר",
+            "name": "journey_contacts",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "acfe_repeater_stylised_button": 0,
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "הוספת איש קשר",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_67784a09bbbc4",
+                    "label": "שם איש קשר",
+                    "name": "contact_name",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_677849e3bbbc3"
+                }
+            ]
+        },
+        {
+            "key": "field_67785ab0d4ca5",
+            "label": "סטטוסים אפשריים",
+            "name": "journey_statuses",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "acfe_repeater_stylised_button": 0,
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "הוספת סטטוס",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_67785ab0d4ca6",
+                    "label": "סטטוס",
+                    "name": "status",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_67785ab0d4ca5"
+                },
+                {
+                    "key": "field_67785bc9d4ca7",
+                    "label": "צבע סטטוס",
+                    "name": "status_color",
+                    "aria-label": "",
+                    "type": "color_picker",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "enable_opacity": 0,
+                    "return_format": "string",
+                    "allow_in_bindings": 0,
+                    "parent_repeater": "field_67785ab0d4ca5"
+                },
+                {
+                    "key": "field_67785c55f3383",
+                    "label": "דיפולטיבי",
+                    "name": "default",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "allow_in_bindings": 0,
+                    "ui": 0,
+                    "ui_on_text": "",
+                    "ui_off_text": "",
+                    "parent_repeater": "field_67785ab0d4ca5"
+                }
+            ]
+        },
+        {
             "key": "field_67686ee82bbf7",
             "label": "תאריכים",
             "name": "",
@@ -200,7 +372,7 @@
             "wrapper": {
                 "width": "",
                 "class": "",
-                "id": ""
+                "id": "journey-dates"
             },
             "acfe_repeater_stylised_button": 0,
             "layout": "table",
@@ -295,30 +467,6 @@
                     "step": "",
                     "prepend": "",
                     "append": "",
-                    "parent_repeater": "field_67686ef82bbf8"
-                },
-                {
-                    "key": "field_6768726fa61a6",
-                    "label": "",
-                    "name": "participants_list_link",
-                    "aria-label": "",
-                    "type": "acfe_button",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "button_value": "לרשימת המשתתפים",
-                    "button_type": "button",
-                    "button_class": "participants-list-button button button-secondary",
-                    "button_id": "",
-                    "button_before": "",
-                    "button_after": "",
-                    "button_ajax": 0,
-                    "allow_in_bindings": 1,
                     "parent_repeater": "field_67686ef82bbf8"
                 },
                 {
@@ -509,5 +657,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1735823413
+    "modified": 1736027046
 }

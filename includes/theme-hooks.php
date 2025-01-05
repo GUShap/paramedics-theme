@@ -72,6 +72,71 @@ function gs_admin_enqueue_scripts()
 add_action('admin_enqueue_scripts', 'gs_admin_enqueue_scripts');
 /*********/
 
+function render_trip_metabox()
+{
+    $is_admin = current_user_can('administrator');
+    if (!$is_admin) {
+        return;
+    }
+
+    $journey_id = get_the_ID();
+    $journey_dates = get_field('dates', $journey_id) ?? [];
+    $journey_statuses = get_field('journey_statuses', $journey_id) ?? [];
+    $journey_contacts = get_field('journey_contacts', $journey_id) ?? [];
+    $journey_managment_template_path = CHILD_THEME_DIR . '/includes/admin/templates/journey-management.php';
+
+    if(empty($journey_dates)) {
+        echo '<p>אין תאריכים למסע זה</p>';
+        return;
+    }
+    if (file_exists($journey_managment_template_path)) {
+        require_once $journey_managment_template_path;
+    }
+}
+
+function add_trip_metabox()
+{
+    // Add the metabox to the "trip" post type edit screen
+    add_meta_box(
+        'trip_custom_metabox',            // Metabox ID
+        __('ניהול תאריכי מסע / סדנה ' . get_the_title(), 'textdomain'), // Title
+        'render_trip_metabox',            // Callback function to display content
+        'trip',                           // Post type
+        'normal',                         // Context (normal, side, or advanced)
+        'default'                         // Priority (default, high, low)
+    );
+}
+add_action('add_meta_boxes', 'add_trip_metabox');
+
+function on_trip_update($post_id, $post, $update)
+{
+    if ($post->post_type != 'trip') {
+        return;
+    }
+    $is_flexible = $_POST['is_flexible'];
+    $participant_status = $_POST['participant_status'];
+    $participant_contact = $_POST['participant_contact'];
+    $journey_dates = get_field('dates', $post_id) ?? [];
+    if(empty($journey_dates)) {
+        return;
+    }
+
+    foreach ($journey_dates as $idx => $date) {
+        $departure_date = $date['departure_date'];
+        $participants = json_decode($date['participants']);
+        foreach ($participants as $participant_idx => $participant) {
+            $participants[$participant_idx]->is_flexible = $is_flexible[$departure_date][$participant_idx];
+            $participants[$participant_idx]->status = $participant_status[$departure_date][$participant_idx];
+            $participants[$participant_idx]->contact = $participant_contact[$departure_date][$participant_idx];
+        }
+        $journey_dates[$idx]['participants'] = json_encode($participants, JSON_UNESCAPED_UNICODE);
+    }
+
+    update_field('dates', $journey_dates, $post_id);
+}
+add_action('save_post', 'on_trip_update', 10, 3);
+/*********/
+
 /* AJAX Hooks */
 // recieve ajax request for action journey_registration
 function journey_registration_handler()
@@ -98,7 +163,8 @@ function journey_registration_handler()
         'unit' => $fields['unit'],
         'journey_date' => $fields['journey_date'],
         'is_flexible' => !empty($fields['flexability']),
-        'status' => 'pending',
+        'status' => '',
+        'contact' => ''
     ];
 
     $res = add_journey_participant($journey_id, $journey_date, $participant);
@@ -109,3 +175,18 @@ function journey_registration_handler()
 }
 add_action('wp_ajax_journey_registration', 'journey_registration_handler');
 add_action('wp_ajax_nopriv_journey_registration', 'journey_registration_handler');
+
+
+function save_participant_data_handler()
+{
+    $post_id = $_POST['post_id'];
+    $departure_date = $_POST['departure_date'];
+    $user_index = $_POST['index'];
+    $participant_data = $_POST['participant_data'];
+    $res = save_participant_data($post_id, $departure_date, $user_index, $participant_data);
+    if ($res['status'] == 'error') {
+        wp_send_json_error($res);
+    }
+    wp_send_json_success($res);
+}
+add_action('wp_ajax_save_participant_data', 'save_participant_data_handler');
