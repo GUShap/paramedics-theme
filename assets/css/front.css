@@ -50,7 +50,7 @@ header #full-logo-white svg path {
 }
 
 header[data-elementor-type="header"].scrolled #white-logo-container {
-    top: 12px !important;
+    top: 10px !important;
 }
 
 header[data-elementor-type="header"].scrolled #full-logo-white {

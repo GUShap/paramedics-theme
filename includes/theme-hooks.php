@@ -10,6 +10,7 @@ function register_widgets($widgets_manager)
 
     $widgets_manager->register_widget_type(new \Elementor\Parallax_Section());
     $widgets_manager->register_widget_type(new \Elementor\Journey_Sign_Up_Form());
+    $widgets_manager->register_widget_type(new \Elementor\Journeys_Archive_Sign_Up_Form());
 }
 add_action('elementor/widgets/register', 'register_widgets');
 function register_tags($manager)
@@ -58,9 +59,7 @@ function gs_enqueue_scripts()
     wp_enqueue_script('gs-script', CHILD_THEME_URI . '/assets/js/front.js', array('jquery'), false, true);
     wp_localize_script('gs-script', 'customVars', array('ajax_url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('gs-nonce')));
 }
-
 add_action('wp_enqueue_scripts', 'gs_enqueue_scripts');
-
 
 // enqueue admin scripts & styles
 function gs_admin_enqueue_scripts()

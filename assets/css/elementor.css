@@ -31,6 +31,9 @@ section.parallax-section-item:is(.active, .visited) .parallax-section-content {
     inset: 0;
 }
 
+body:has(.sign-up-container .form-wrapper.active){
+    overflow: hidden;
+}
 .sign-up-container .form-wrapper:not(.active){
     display: none;
 }

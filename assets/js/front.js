@@ -202,19 +202,22 @@ function setCustomSelect($form) {
         const $wrapper = $(this).closest('.custom-select-wrapper');
         const $select = $(this).closest('.input-wrapper').find('select');
         const $list = $(this).closest('.custom-select-list');
+        const $item = $(this).closest('.custom-select-item');
 
         const prefix = $wrapper.data('prefix');
         const isDate = $wrapper.data('date');
 
+
         let value = $(this).val();
+        let labelValue = $item.data('label-value');
         let text = prefix ? `${prefix} ${value}` : value;
 
         if (isDate) {
-            const dateArr = value.split('-');
+            const dateArr = labelValue ? labelValue.split('-') : value.split('-');
             text = dateArr.join('/');
         }
 
-        $wrapper.find('>label').text(text);
+        $wrapper.find('>label').text(labelValue ? labelValue : text);
         $list.removeClass('active');
         $select.val(value).trigger('change');
     });
@@ -238,7 +241,8 @@ function setConditionalFields($form) {
         const $followingInputWrappers = $form.find(`.condition-res[data-condition="${condition}"]`);
         const $selectedRes = value ? $followingInputWrappers.filter(function () {
             const conditionValues = $(this).data('condition-value');
-            return conditionValues.includes(value);
+            if (typeof conditionValues === 'string') return conditionValues.includes(value);
+            else return conditionValues == +value;
         }) : null;
 
         $followingInputWrappers.removeClass('active');
