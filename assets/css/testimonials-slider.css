@@ -1,0 +1,99 @@
+.testimonials-slider-wrapper {
+    display: flex;
+    height: 650px;
+}
+
+.testimonials-slider-wrapper h3,
+.testimonials-slider-wrapper p {
+    margin: 0;
+}
+
+.testimonials-slider-wrapper>* {
+    flex: 1;
+}
+
+.testimonials-main-slider .swiper-slide {
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonials-slider-wrapper .testimonials-thumbs-slider .swiper-slide {
+    display: flex;
+}
+
+.testimonials-slider-wrapper .testimonials-thumbs-slider .swiper-slide p,
+.testimonials-slider-wrapper .testimonials-thumbs-slider .swiper-slide h3 {
+    margin: 0;
+    /* line-height: 1; */
+}
+
+.testimonials-slider-wrapper .testimonials-thumbs-slider .swiper-slide>* {
+    flex: 1;
+}
+
+.testimonials-slider-wrapper .testimonials-thumbs-slider .image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.testimonials-slider-wrapper .testimonials-thumbs-slider .swiper-slide img,
+.testimonials-slider-wrapper .testimonials-main-slider .swiper-slide video {
+    width: 100%;
+    height: 100%;
+}
+
+.video-wrapper {
+    position: relative;
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background-color: #ffffff;
+    /* Circle color */
+    border-radius: 50%;
+    border: 1px solid #fff;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s;
+}
+
+.play-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    transform: translate(-40%, -50%);
+    border-style: solid;
+    border-width: 13px 0 13px 22px;
+    border-color: transparent transparent transparent #D9D9D9;
+    /* Triangle color */
+    transition: all 0.15s;
+}
+
+.play-button:hover {
+    border-color: #000;
+    /* Circle color on hover */
+}
+
+.play-button:hover::before {
+    border-color: transparent transparent transparent #000;
+    /* Triangle color on hover */
+}
+
+.testimonials-slider-wrapper .swiper-button:after {
+    color: #D9D9D9;
+    text-shadow: 0px 0px 6px #898989;
+    transition: all 0.15s;
+}
+
+.testimonials-slider-wrapper .swiper-button:hover:after {
+    color: #000
+}

@@ -7,10 +7,14 @@ function register_widgets($widgets_manager)
 {
     require_once CHILD_THEME_DIR . '/includes/elementor/widgets/parallax-section.php'; // Path to the widget file
     require_once CHILD_THEME_DIR . '/includes/elementor/widgets/journey-widgets.php'; // Path to the widget file
+    require_once CHILD_THEME_DIR . '/includes/elementor/widgets/testimonials-widgets.php';
 
     $widgets_manager->register_widget_type(new \Elementor\Parallax_Section());
+
     $widgets_manager->register_widget_type(new \Elementor\Journey_Sign_Up_Form());
     $widgets_manager->register_widget_type(new \Elementor\Journeys_Archive_Sign_Up_Form());
+
+    $widgets_manager->register_widget_type(new \Elementor\Testimonials_Slider());
 }
 add_action('elementor/widgets/register', 'register_widgets');
 function register_tags($manager)
@@ -53,11 +57,18 @@ add_action('elementor/elements/categories_registered', 'add_elementor_widget_cat
 /* enqueue scripts and styles */
 function gs_enqueue_scripts()
 {
+
     wp_enqueue_style('gs-style', CHILD_THEME_URI . '/assets/css/front.css', array(), false, 'all');
     wp_enqueue_style('gs-elementor-style', CHILD_THEME_URI . '/assets/css/elementor.css', array(), false, 'all');
+    
+    wp_enqueue_style('swiper-css', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css');
+    wp_enqueue_style('testimonials-slider-css', CHILD_THEME_URI . '/assets/css/testimonials-slider.css');
 
     wp_enqueue_script('gs-script', CHILD_THEME_URI . '/assets/js/front.js', array('jquery'), false, true);
     wp_localize_script('gs-script', 'customVars', array('ajax_url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('gs-nonce')));
+
+    wp_enqueue_script('swiper-js', 'https://cdn.jsdelivr.net/npm/swiper@latest/swiper-bundle.min.js', [], null);
+    wp_enqueue_script('testimonials-slider-js', CHILD_THEME_URI . '/assets/js/testimonials-slider.js', ['jquery', 'swiper-js'], null);
 }
 add_action('wp_enqueue_scripts', 'gs_enqueue_scripts');
 
@@ -84,7 +95,7 @@ function render_trip_metabox()
     $journey_contacts = get_field('journey_contacts', $journey_id) ?? [];
     $journey_managment_template_path = CHILD_THEME_DIR . '/includes/admin/templates/journey-management.php';
 
-    if(empty($journey_dates)) {
+    if (empty($journey_dates)) {
         echo '<p>אין תאריכים למסע זה</p>';
         return;
     }
@@ -116,7 +127,7 @@ function on_trip_update($post_id, $post, $update)
     $participant_status = $_POST['participant_status'];
     $participant_contact = $_POST['participant_contact'];
     $journey_dates = get_field('dates', $post_id) ?? [];
-    if(empty($journey_dates)) {
+    if (empty($journey_dates)) {
         return;
     }
 
