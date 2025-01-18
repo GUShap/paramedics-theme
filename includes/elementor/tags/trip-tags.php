@@ -44,7 +44,6 @@ class Next_Departure_Date extends Tag{
         $current_time = time();
 
         foreach ($dates as $date) {
-            // dd($date);
             $departure_date = DateTime::createFromFormat('d-m-Y', $date['departure_date']);
             if ($departure_date && $departure_date->getTimestamp() > $current_time) {
                 if ($closest_date === null || $departure_date < $closest_date) {

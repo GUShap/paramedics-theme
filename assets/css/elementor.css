@@ -10,11 +10,7 @@ section.parallax-section-item .parallax-section-content,
 section.parallax-section-item .parallax-section-content>*,
 section.parallax-section-item .parallax-section-content>.elementor-element,
 section.parallax-section-item .parallax-section-content>[data-elementor-type="section"],
-section.parallax-section-item .parallax-section-content>[data-elementor-type="section"]>.elementor-element,
-section.parallax-section-item .elementor-element[data-element_type="container"]>.e-widget-swiper,
-section.parallax-section-item .elementor-swiper,
-section.parallax-section-item .swiper,
-section.parallax-section-item .swiper-slide {
+section.parallax-section-item .parallax-section-content>[data-elementor-type="section"]>.elementor-element{
     height: 100% !important;
 }
 
@@ -31,10 +27,24 @@ section.parallax-section-item:is(.active, .visited) .parallax-section-content {
     inset: 0;
 }
 
-body:has(.sign-up-container .form-wrapper.active){
+section.parallax-section-item .parallax-section-content div[data-elementor-type="section"]>.elementor-element {
+    max-height: 100vh;
+}
+
+section.parallax-section-item:not(:first-of-type).active .parallax-section-content{
+    overflow-y: auto;
+}
+
+section.parallax-section-item.active .parallax-section-content::-webkit-scrollbar {
+    width: 0;
+  }
+
+/***************************/
+body:has(.sign-up-container .form-wrapper.active) {
     overflow: hidden;
 }
-.sign-up-container .form-wrapper:not(.active){
+
+.sign-up-container .form-wrapper:not(.active) {
     display: none;
 }
 
@@ -47,13 +57,13 @@ body:has(.sign-up-container .form-wrapper.active){
     transform: translateY(35%);
 }
 
-.sign-up-container .form-wrapper button:disabled{
+.sign-up-container .form-wrapper button:disabled {
     opacity: 0.5;
 }
 
-.sign-up-container .form-wrapper button:disabled:hover{
-    background-color: var( --e-global-color-primary );
-    color:#fff;
+.sign-up-container .form-wrapper button:disabled:hover {
+    background-color: var(--e-global-color-primary);
+    color: #fff;
 }
 
 .sign-up-container .form-wrapper:after {
@@ -286,19 +296,20 @@ body:has(.sign-up-container .form-wrapper.active){
     color: #8d2424;
 }
 
-.sign-up-container .close-button{
+.sign-up-container .close-button {
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 25px;
-    color: var( --e-global-color-primary );
+    color: var(--e-global-color-primary);
     background-color: #fff;
     border-radius: 50%;
     height: 25px;
     width: 25px;
     padding: 0;
 }
-.sign-up-container .close-button:hover{
-    color:#fff;
-    background-color: var( --e-global-color-primary );
+
+.sign-up-container .close-button:hover {
+    color: #fff;
+    background-color: var(--e-global-color-primary);
 }
