@@ -190,3 +190,54 @@ function has_date_passed($date)
     // Compare the dates
     return $input_date < $current_date;
 }
+
+add_action('elementor/query/custom-team-query', function ($query) {
+    $query->set('post_type', ['team']);
+    $slug = basename(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
+    $term = get_term_by('slug', $slug, 'department'); // Get term by slug
+    $tax_query = [
+        [
+            'taxonomy' => 'department',
+            'field' => 'term_id',
+            'terms' => $term->term_id,
+        ],
+        [
+            'taxonomy' => 'role',
+            'field' => 'slug',
+            'terms' => 'dep-head',
+            'operator' => 'NOT IN'
+        ],
+    ];
+
+    $query->set('tax_query', $tax_query);
+
+});
+
+add_action('elementor/query/custom-team-manager-query', function ($query) {
+    $query->set('post_type', ['team']);
+    $slug = basename(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
+    $term = get_term_by('slug', $slug, 'department'); // Get term by slug
+
+    $tax_query = [
+        'relation' => 'AND',
+        [
+            'taxonomy' => 'department',
+            'field' => 'term_id',
+            'terms' => $term->term_id,
+        ],
+        [
+            'taxonomy' => 'role',
+            'field' => 'slug',
+            'terms' => 'dep-head',
+        ],
+    ];
+
+    $query->set('tax_query', $tax_query);
+
+});
+
+add_action('template_redirect', function () {
+    $slug = basename(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
+
+    // dd($term);
+});

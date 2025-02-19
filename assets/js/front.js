@@ -16,6 +16,7 @@ const sectionManager = (() => {
     let currentActiveSection = null;
     let nextSection = null;
     let isScrollingDown = true;
+    let distanceThreshold = 1;
 
     return {
         getCurrentActiveSection: () => currentActiveSection,
@@ -29,7 +30,11 @@ const sectionManager = (() => {
         getIsScrollingDown: () => isScrollingDown,
         setIsScrollingDown: (scrollingDown) => {
             isScrollingDown = scrollingDown;
-        }
+        },
+        getDistanceThreshold: () => distanceThreshold,
+        setDistanceThreshold: (threshold) => {
+            distanceThreshold = threshold;
+        },
     };
 })();
 
@@ -96,7 +101,15 @@ function setSectionScrolloing() {
     $(window).on('scroll', function () {
         const isScrollingDown = $(this).scrollTop() > prevScroll;
         const $currentActiveSection = $sections.filter('.active');
-        const $nextSection = isScrollingDown ? $currentActiveSection.next() : $currentActiveSection.prev();
+        let $nextSection = null;
+        if (isScrollingDown) {
+            $nextSection = $currentActiveSection.next();
+            if (!$nextSection.length) {
+                $nextSection = $currentActiveSection.closest('.elementor-element.e-parent[data-element_type="container"]').next('.elementor-element[data-element_type="container"]');
+            }
+        } else {
+            $nextSection = $currentActiveSection.prev();
+        }
 
         sectionManager.setCurrentActiveSection($currentActiveSection);
         sectionManager.setNextSection($nextSection);
@@ -108,6 +121,15 @@ function setSectionScrolloing() {
         isScrollingDown
             ? setSectionsScrollingDown()
             : setSectionsScrollingUp();
+
+        // distance threshold
+        const screenHeight = $(window).height();
+        const nextSectionHeight = Array.from($nextSection.find('.e-parent').first().find('>.e-child')).reduce((acc, x) => acc + $(x).height(), 0);
+        if (nextSectionHeight > screenHeight) {
+            sectionManager.setDistanceThreshold(screenHeight - nextSectionHeight);
+        } else {
+            sectionManager.setDistanceThreshold(1);
+        }
     });
 
     $stickyHeadings.each(function () {
@@ -117,8 +139,11 @@ function setSectionScrolloing() {
 }
 
 function setSectionsScrollingDown() {
+
     const $nextSection = sectionManager.getNextSection();
     const distanceFromTop = $nextSection.offset().top - $(window).scrollTop();
+    const distanceThreshold = sectionManager.getDistanceThreshold();
+
     if (distanceFromTop <= 1) {
         $nextSection.addClass('active');
         $nextSection.prevAll().removeClass('active').addClass('visited');
@@ -128,7 +153,10 @@ function setSectionsScrollingDown() {
 function setSectionsScrollingUp() {
     const $currentActiveSection = sectionManager.getCurrentActiveSection();
     const $nextSection = sectionManager.getNextSection();
-    let isOverlapping = $currentActiveSection.next().length && $(window).scrollTop() - ($currentActiveSection.next().offset().top - $(window).height()) >= 0;
+    const $refSection = $currentActiveSection.next().length
+        ? $currentActiveSection.next()
+        : $currentActiveSection.closest('.elementor-element.e-parent[data-element_type="container"]').next('.elementor-element[data-element_type="container"]');
+    let isOverlapping = $refSection.length && $(window).scrollTop() - ($refSection.offset().top - $(window).height()) >= 0;
 
     if ($(window).scrollTop() - ($('footer').offset().top - $(window).height()) >= 0) {
         isOverlapping = true;
